@@ -4,8 +4,8 @@ import "fmt"
 
 type Monster struct {
 	Name       string
-	MaxHP      int
-	HP         int
+	MaxHealth  int
+	Health     int
 	Attack     int
 	Initiative int
 }
@@ -13,35 +13,47 @@ type Monster struct {
 func initGoblin() Monster {
 	return Monster{
 		Name:       "Gobelin d'entrainement",
-		MaxHP:      40,
-		HP:         40,
+		MaxHealth:  40,
+		Health:     40,
 		Attack:     5,
 		Initiative: 5,
 	}
 }
 
-// goblinPattern : 100% de l'attaque, 200% tous les 3 tours.
 func goblinPattern(m *Monster, c *Character, turn int) {
 	dmg := m.Attack
 	if turn%3 == 0 {
 		dmg *= 2
 	}
-	c.HP -= dmg
-	if c.HP < 0 {
-		c.HP = 0
+	c.Health -= dmg
+	if c.Health < 0 {
+		c.Health = 0
 	}
 	fmt.Printf("%s inflige à %s %d de dégâts\n", m.Name, c.Name, dmg)
-	fmt.Printf("%s PV : %d / %d\n", c.Name, c.HP, c.MaxHP)
+	fmt.Printf("%s PV : %d / %d\n", c.Name, c.Health, c.MaxHealth)
 }
 
-// initNoxar : boss du jeu (antagoniste principal).
-// L'initiative et l'attaque sont à ajuster selon l'équilibrage voulu.
 func initNoxar() Monster {
 	return Monster{
 		Name:       "Noxar",
-		MaxHP:      120,
-		HP:         120,
+		MaxHealth:  120,
+		Health:     120,
 		Attack:     12,
 		Initiative: 8,
 	}
+}
+
+func bossPattern(m *Monster, c *Character, turn int) {
+	dmg := m.Attack
+	attackName := "Attaque basique"
+	if turn%4 == 0 {
+		dmg *= 3
+		attackName = "Attaque spéciale"
+	}
+	c.Health -= dmg
+	if c.Health < 0 {
+		c.Health = 0
+	}
+	fmt.Printf("%s utilise %s et inflige à %s %d de dégâts\n", m.Name, attackName, c.Name, dmg)
+	fmt.Printf("%s PV : %d / %d\n", c.Name, c.Health, c.MaxHealth)
 }
