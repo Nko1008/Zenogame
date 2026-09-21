@@ -7,6 +7,7 @@ type Monster struct {
 	MaxHealth  int
 	Health     int
 	Attack     int
+	Experience int
 	Initiative int
 }
 
@@ -16,6 +17,7 @@ func initGoblin() Monster {
 		MaxHealth:  40,
 		Health:     40,
 		Attack:     5,
+		Experience: 20,
 		Initiative: 5,
 	}
 }
@@ -39,6 +41,7 @@ func initNoxar() Monster {
 		MaxHealth:  120,
 		Health:     120,
 		Attack:     12,
+		Experience: 100,
 		Initiative: 8,
 	}
 }
@@ -56,4 +59,6 @@ func bossPattern(m *Monster, c *Character, turn int) {
 	}
 	fmt.Printf("%s utilise %s et inflige à %s %d de dégâts\n", m.Name, attackName, c.Name, dmg)
 	fmt.Printf("%s PV : %d / %d\n", c.Name, c.Health, c.MaxHealth)
+}
+
 }
