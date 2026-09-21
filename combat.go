@@ -13,6 +13,7 @@ func characterTurn(c *Character, m *Monster, reader *bufio.Reader) {
 	fmt.Println("\n--- Votre tour ---")
 	fmt.Println("1. Attaquer")
 	fmt.Println("2. Inventaire")
+	fmt.Println("3. Sorts")
 	fmt.Print("Choix : ")
 
 	choice, _ := reader.ReadString('\n')
@@ -28,6 +29,30 @@ func characterTurn(c *Character, m *Monster, reader *bufio.Reader) {
 		fmt.Println("Vous utilisez Attaque basique")
 		fmt.Printf("%s inflige %d dégâts à %s\n", c.Name, dmg, m.Name)
 		fmt.Printf("%s PV : %d / %d\n", m.Name, m.Health, m.MaxHealth)
+
+	case "3":
+		if len(c.Skills) == 0 {
+			fmt.Println("Vous ne connaissez aucun sort.")
+			return
+		}
+		fmt.Println("Sorts :")
+		for i, s := range c.Skills {
+			fmt.Printf("%d. %s (%d mana)\n", i+1, s, spellCosts[s])
+		}
+		fmt.Print("Choisissez un sort : ")
+		spellChoice, _ := reader.ReadString('\n')
+		spellChoice = trimNewline(spellChoice)
+
+		index := -1
+		fmt.Sscanf(spellChoice, "%d", &index)
+		if index < 1 || index > len(c.Skills) {
+			fmt.Println("Choix invalide.")
+			return
+		}
+
+		if !castSpell(c, m, c.Skills[index-1]) {
+			return
+		}
 
 	case "2":
 		if len(c.Inventory) == 0 {
@@ -108,6 +133,7 @@ func trainingFight(c *Character, reader *bufio.Reader) {
 		fmt.Println("\nVous avez été vaincu...")
 	} else {
 		fmt.Println("\nVictoire ! Le gobelin est vaincu.")
+		gainExperience(c, m.Experience)
 	}
 	fmt.Println("Retour au menu principal.")
 }
@@ -139,6 +165,7 @@ func bossFight(c *Character, reader *bufio.Reader) {
 		fmt.Println("\nVous avez été vaincu...")
 	} else {
 		fmt.Printf("\n%s est vaincu ! Vous avez gagné le combat final !\n", boss.Name)
+		gainExperience(c, boss.Experience)
 	}
 	fmt.Println("Retour au menu principal.")
 }
