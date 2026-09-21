@@ -9,6 +9,7 @@ type Character struct {
 	MaxHealth int
 	Health    int
 	Inventory []string
+	Skills    []string 
 }
 
 func initCharacter() Character {
@@ -19,6 +20,7 @@ func initCharacter() Character {
 		MaxHealth: 100,
 		Health:    40,
 		Inventory: []string{"Potion", "Potion", "Potion"},
+		Skills:    []string{"Coup de poing"}, 
 	}
 	return player
 }
