@@ -36,7 +36,7 @@ func blacksmith(c *Character) {
 			for mat := range r.Materials {
 				mats = append(mats, mat)
 			}
-			sort.Strings(mats) // ordre stable à l'affichage
+			sort.Strings(mats) 
 			parts := []string{}
 			for _, mat := range mats {
 				parts = append(parts, fmt.Sprintf("%d %s", r.Materials[mat], mat))
