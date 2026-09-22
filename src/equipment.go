@@ -2,7 +2,6 @@ package main
 
 import "fmt"
 
-
 const (
 	itemHat   = "Chapeau de l'aventurier"
 	itemTunic = "Tunique de l'aventurier"
@@ -60,48 +59,66 @@ func slotPtr(c *Character, slot string) *string {
 	}
 }
 
+// equip retire l'objet de l'inventaire et l'installe dans le bon emplacement.
+// Si un autre objet occupait déjà cet emplacement, il retourne dans l'inventaire.
 func equip(c *Character, item string) {
 	info, ok := equipData[item]
 	if !ok {
 		return
 	}
 	slot := slotPtr(c, info.Slot)
-	removeInventory(c, item, 1) // libère une place avant de rendre l'ancien équipement
-	if *slot != "" {
-		old := equipData[*slot]
-		c.MaxHP -= old.HP
-		c.Initiative -= old.Initiative
-		c.Inventory = append(c.Inventory, *slot)
-		fmt.Printf("%s retourne dans l'inventaire.\n", *slot)
+	old := *slot
+
+	if !removeInventory(c, item, 1) {
+		fmt.Println("Vous ne possédez pas cet objet.")
+		return
 	}
+
+	if old != "" {
+		if !addInventory(c, old) {
+			// Pas de place pour reposer l'ancien équipement : on annule l'échange.
+			c.Inventory = append(c.Inventory, item)
+			fmt.Println("Inventaire plein, impossible d'échanger l'équipement.")
+			return
+		}
+		oldInfo := equipData[old]
+		c.MaxHealth -= oldInfo.HP
+		c.Initiative -= oldInfo.Initiative
+		fmt.Printf("%s retourne dans l'inventaire.\n", old)
+	}
+
 	*slot = item
-	c.MaxHP += info.HP
+	c.MaxHealth += info.HP
 	c.Initiative += info.Initiative
-	if c.HP > c.MaxHP {
-		c.HP = c.MaxHP
+	if c.Health > c.MaxHealth {
+		c.Health = c.MaxHealth
 	}
-	fmt.Printf("Équipé : %s (PV max : %d, initiative : %d)\n", item, c.MaxHP, c.Initiative)
+	fmt.Printf("Équipé : %s (PV max : %d, initiative : %d)\n", item, c.MaxHealth, c.Initiative)
 }
 
 // useItem : utilisé depuis l'inventaire et depuis le combat.
+// Chaque cas gère lui-même le retrait de l'objet de l'inventaire.
 func useItem(c *Character, item string) {
 	if _, ok := equipData[item]; ok {
 		equip(c, item)
 		return
 	}
 	switch item {
+	case "Potion de vie":
+		takePot(c)
+	case "Potion de poison":
+		poisonPot(c)
 	case itemUpg:
 		if upgradeInventorySlot(c) {
 			removeInventory(c, item, 1)
 		}
 	case "Livre de Sort : Star Shot":
 		before := len(c.Skills)
-		spellBook(&c.Skills)        
+		spellBook(&c.Skills)
 		if len(c.Skills) > before { // le livre n'est consommé que si le sort est appris
 			removeInventory(c, item, 1)
 		}
 	default:
-		
 		fmt.Println("Cet objet n'est pas encore utilisable :", item)
 	}
 }
