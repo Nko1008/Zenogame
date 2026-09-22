@@ -2,81 +2,72 @@ package main
 
 import "fmt"
 
+// Equipment représente les 3 emplacements équipables du personnage.
+type Equipment struct {
+	Head  string
+	Torso string
+	Feet  string
+}
+
 type Character struct {
-	Name           string
-	Class          string
-	Level          int
-	MaxHealth      int
-	Health         int
-	Inventory      []string
-	Skills         []string
-	Initiative     int
-	Experience     int
-	ExperienceMax  int
-	Mana           int
-	MaxMana        int
+	Name          string
+	Class         string
+	Level         int
+	MaxHealth     int
+	Health        int
+	Inventory     []string
+	Skills        []string
+	Initiative    int
+	Experience    int
+	ExperienceMax int
+	Mana          int
+	MaxMana       int
+
+	Money        int
+	Equipment    Equipment
+	InventoryMax int
+	UpgradeCount int
+	GiftReceived bool
+	QuestDone    bool
 }
 
 func initCharacter() Character {
-	player := Character{
+	return Character{
 		Name:          "Zeno",
 		Class:         "Elfe",
 		Level:         1,
 		MaxHealth:     100,
 		Health:        40,
-		Inventory:     []string{"Potion", "Potion", "Potion"},
+		Inventory:     []string{"Potion de vie", "Potion de vie", "Potion de vie"},
 		Skills:        []string{"Coup de poing"},
 		Initiative:    10,
 		Experience:    0,
 		ExperienceMax: 50,
 		Mana:          30,
 		MaxMana:       30,
+		Money:         100,
+		InventoryMax:  10,
 	}
-	return player
 }
 
 func displayCharacter(player Character) {
 	fmt.Println("Nom :", player.Name)
 	fmt.Println("Classe :", player.Class)
 	fmt.Println("Niveau :", player.Level)
-	fmt.Println("Santé maximale :", player.MaxHealth)
 	fmt.Println("PV :", player.Health, "/", player.MaxHealth)
+	fmt.Println("Or :", player.Money)
 	fmt.Println("Inventaire :", player.Inventory)
 	fmt.Println("Sorts :", player.Skills)
 	fmt.Printf("Expérience : %d / %d\n", player.Experience, player.ExperienceMax)
 	fmt.Printf("Mana : %d / %d\n", player.Mana, player.MaxMana)
+	fmt.Printf("Initiative : %d\n", player.Initiative)
+	fmt.Printf("Equipement - Tête: %s | Torse: %s | Pieds: %s\n",
+		orNone(player.Equipment.Head), orNone(player.Equipment.Torso), orNone(player.Equipment.Feet))
 }
 
-func takePotion(player *Character) {
-	for i, item := range player.Inventory {
-		if item == "Potion" {
-			player.Health += 50
-
-			if player.Health > Player.MaxHealth {
-				player.Health = player.MaxHealth
-			}
-			player.Inventory = apprend (
-				player.Inventory[:i],
-				player.Inventory[i+1:]...,
-			)
-			fmt.PrintIn("Vous avez utilisé une potion !")
-			fmt.PrintIn(PV :=", player.Health, "/", player.MaxHealth)
-			return
-		}
+func orNone(s string) string {
+	if s == "" {
+		return "-"
 	}
-	fmt.PrintIn(Vous n'avez aucune potion !")
-}
-
-func spellBook(skills *[]string) {
-	for _, skill := range *skills {
-		if skill == "Star Shot" {
-			fmt.Println("Vous connaissez déjà Star Shot !")
-			return
-		}
-	}
-	*skills = append(*skills, "Star Shot")
-	fmt.Println("Vous avez appris : Star Shot !")
-}
-
-	displayCharacter(player)
+	return s
 }
