@@ -96,12 +96,12 @@ func useItem(c *Character, item string) {
 		}
 	case "Livre de Sort : Star Shot":
 		before := len(c.Skills)
-		spellBook(&c.Skills)        // fonction de ta coéquipière (tâche 10)
+		spellBook(&c.Skills)        
 		if len(c.Skills) > before { // le livre n'est consommé que si le sort est appris
 			removeInventory(c, item, 1)
 		}
 	default:
-		// TODO : potions, livre de sort... (autres membres du groupe)
+		
 		fmt.Println("Cet objet n'est pas encore utilisable :", item)
 	}
 }
