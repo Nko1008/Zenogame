@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-// Équipements du sujet
+
 const (
 	itemHat   = "Chapeau de l'aventurier"
 	itemTunic = "Tunique de l'aventurier"
