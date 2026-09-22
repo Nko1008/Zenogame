@@ -11,7 +11,7 @@ func whoAreThey() {
 func main() {
 	fmt.Println("Bienvenue à Skylandia !")
 
-	player := initCharacter()
+	player := characterCreation()
 
 	for {
 		fmt.Println("\n=== MENU ===")
