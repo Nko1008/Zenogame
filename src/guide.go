@@ -103,19 +103,15 @@ func quest(c *Character) {
 		fmt.Println("Nekomata : « Tu as déjà accompli mon objectif, bravo ! »")
 		return
 	}
-	items := []string{itemHat, itemTunic, itemBoots}
-	have := 0
-	for _, it := range items {
-		if owns(c, it) {
-			have++
-		}
+	if !c.NoxarDefeated {
+		fmt.Println("Objectif : vaincre Noxar (0/1)")
+		fmt.Println("Nekomata : « Prépare-toi bien avant d'affronter Noxar : équipement, potions et sorts ! »")
+		return
 	}
-	fmt.Printf("Objectif : fabriquer les 3 équipements de l'aventurier (%d/3)\n", have)
-	if have == 3 {
-		c.Money += questReward
-		c.QuestDone = true
-		fmt.Printf("Objectif accompli ! Récompense : %d or (or total : %d)\n", questReward, c.Money)
-	}
+	fmt.Println("Objectif : vaincre Noxar (1/1)")
+	c.Money += questReward
+	c.QuestDone = true
+	fmt.Printf("Objectif accompli ! Récompense : %d or (or total : %d)\n", questReward, c.Money)
 }
 
 // Idée 6 : sanctuaire

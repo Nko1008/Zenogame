@@ -23,12 +23,13 @@ type Character struct {
 	Mana          int
 	MaxMana       int
 
-	Money        int
-	Equipment    Equipment
-	InventoryMax int
-	UpgradeCount int
-	GiftReceived bool
-	QuestDone    bool
+	Money         int
+	Equipment     Equipment
+	InventoryMax  int
+	UpgradeCount  int
+	GiftReceived  bool
+	QuestDone     bool
+	NoxarDefeated bool
 }
 
 func initCharacter() Character {

@@ -6,11 +6,15 @@ func playerStarts(c *Character, m *Monster) bool {
 	return c.Initiative >= m.Initiative
 }
 
-func characterTurn(c *Character, m *Monster) {
+// characterTurn joue le tour du joueur.
+// Elle renvoie true si le joueur a choisi de fuir le combat (le combat doit
+// alors s'arrêter immédiatement), false sinon.
+func characterTurn(c *Character, m *Monster) bool {
 	fmt.Println("\n--- Votre tour ---")
 	fmt.Println("1. Attaquer")
 	fmt.Println("2. Inventaire")
 	fmt.Println("3. Sorts")
+	fmt.Println("4. Fuir le combat")
 
 	switch readChoice("> ") {
 	case 1:
@@ -26,7 +30,7 @@ func characterTurn(c *Character, m *Monster) {
 	case 2:
 		if len(c.Inventory) == 0 {
 			fmt.Println("Votre inventaire est vide.")
-			return
+			return false
 		}
 		fmt.Println("Inventaire :")
 		for i, it := range c.Inventory {
@@ -35,7 +39,7 @@ func characterTurn(c *Character, m *Monster) {
 		choice := readChoice("> ")
 		if choice < 1 || choice > len(c.Inventory) {
 			fmt.Println("Choix invalide.")
-			return
+			return false
 		}
 		item := c.Inventory[choice-1]
 		useItem(c, item)
@@ -43,7 +47,7 @@ func characterTurn(c *Character, m *Monster) {
 	case 3:
 		if len(c.Skills) == 0 {
 			fmt.Println("Vous ne connaissez aucun sort.")
-			return
+			return false
 		}
 		fmt.Println("Sorts :")
 		for i, s := range c.Skills {
@@ -52,13 +56,19 @@ func characterTurn(c *Character, m *Monster) {
 		choice := readChoice("> ")
 		if choice < 1 || choice > len(c.Skills) {
 			fmt.Println("Choix invalide.")
-			return
+			return false
 		}
 		castSpell(c, m, c.Skills[choice-1])
+
+	case 4:
+		fmt.Println("Vous prenez la fuite...")
+		return true
 
 	default:
 		fmt.Println("Choix invalide.")
 	}
+
+	return false
 }
 
 func trainingFight(c *Character) {
@@ -70,23 +80,43 @@ func trainingFight(c *Character) {
 	for m.Health > 0 {
 		fmt.Printf("\n----- Tour %d -----\n", turn)
 
+		var fled bool
 		if playerStarts(c, &m) {
-			characterTurn(c, &m)
-			if m.Health > 0 {
+			fled = characterTurn(c, &m)
+			if !fled && m.Health > 0 {
 				goblinPattern(&m, c, turn)
 				isDead(c)
 			}
 		} else {
 			goblinPattern(&m, c, turn)
 			isDead(c)
-			characterTurn(c, &m)
+			fled = characterTurn(c, &m)
+		}
+		if fled {
+			fmt.Println("\nVous avez fui le combat.")
+			fmt.Println("Retour au menu principal.")
+			return
 		}
 		turn++
 	}
 
 	fmt.Println("\nVictoire ! Le gobelin est vaincu.")
 	gainExperience(c, m.Experience)
+	gainGold(c, m.Gold)
+	dropMaterial(c)
 	fmt.Println("Retour au menu principal.")
+}
+
+// bossDeath vérifie si le joueur est mort face à Noxar. Contrairement à
+// isDead (utilisée contre les gobelins), il n'y a pas de résurrection ici :
+// la mort face à Noxar met fin au combat et renvoie au menu principal.
+func bossDeath(c *Character, boss *Monster) bool {
+	if c.Health <= 0 {
+		fmt.Printf("\n%s succombe face à %s...\n", c.Name, boss.Name)
+		fmt.Println("Retour au menu principal.")
+		return true
+	}
+	return false
 }
 
 func bossFight(c *Character) {
@@ -98,21 +128,33 @@ func bossFight(c *Character) {
 	for boss.Health > 0 {
 		fmt.Printf("\n----- Tour %d -----\n", turn)
 
+		var fled bool
 		if playerStarts(c, &boss) {
-			characterTurn(c, &boss)
-			if boss.Health > 0 {
+			fled = characterTurn(c, &boss)
+			if !fled && boss.Health > 0 {
 				bossPattern(&boss, c, turn)
-				isDead(c)
+				if bossDeath(c, &boss) {
+					return
+				}
 			}
 		} else {
 			bossPattern(&boss, c, turn)
-			isDead(c)
-			characterTurn(c, &boss)
+			if bossDeath(c, &boss) {
+				return
+			}
+			fled = characterTurn(c, &boss)
+		}
+		if fled {
+			fmt.Println("\nVous avez fui le combat.")
+			fmt.Println("Retour au menu principal.")
+			return
 		}
 		turn++
 	}
 
 	fmt.Printf("\n%s est vaincu ! Vous avez gagné le combat final !\n", boss.Name)
+	c.NoxarDefeated = true
 	gainExperience(c, boss.Experience)
+	gainGold(c, boss.Gold)
 	fmt.Println("Retour au menu principal.")
 }

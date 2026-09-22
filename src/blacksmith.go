@@ -28,6 +28,26 @@ var recipes = []recipe{
 	{itemVoidBoots, map[string]int{"Peau de Troll": 2, "Cuir de Sanglier": 1}},
 }
 
+// effectLabel décrit en une phrase courte ce que rapporte un équipement,
+// pour que le joueur sache pourquoi il le fabrique et pas juste "au pif".
+func effectLabel(item string) string {
+	info, ok := equipData[item]
+	if !ok {
+		return ""
+	}
+	effects := []string{}
+	if info.HP != 0 {
+		effects = append(effects, fmt.Sprintf("+%d PV max", info.HP))
+	}
+	if info.Initiative != 0 {
+		effects = append(effects, fmt.Sprintf("+%d initiative", info.Initiative))
+	}
+	if len(effects) == 0 {
+		return ""
+	}
+	return " -> " + strings.Join(effects, ", ")
+}
+
 func blacksmith(c *Character) {
 	for {
 		fmt.Printf("\n--- Forgeron --- (Or : %d, coût : %d)\n", c.Money, forgeCost)
@@ -41,7 +61,7 @@ func blacksmith(c *Character) {
 			for _, mat := range mats {
 				parts = append(parts, fmt.Sprintf("%d %s", r.Materials[mat], mat))
 			}
-			fmt.Printf("%d. %s (%s)\n", i+1, r.Result, strings.Join(parts, ", "))
+			fmt.Printf("%d. %s (%s)%s\n", i+1, r.Result, strings.Join(parts, ", "), effectLabel(r.Result))
 		}
 		fmt.Println("0. Retour")
 		choice := readChoice("> ")
@@ -77,6 +97,10 @@ func craft(c *Character, r recipe) {
 		removeInventory(c, mat, qty)
 	}
 	c.Money -= forgeCost
-	addInventory(c, r.Result)
 	fmt.Printf("Vous avez fabriqué : %s\n", r.Result)
+
+	// L'objet fabriqué s'équipe automatiquement : ça donne tout de suite
+	// le bonus de PV max (et d'initiative) associé à l'équipement.
+	addInventory(c, r.Result)
+	equip(c, r.Result)
 }

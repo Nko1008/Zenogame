@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
 type Monster struct {
 	Name       string
@@ -9,6 +12,7 @@ type Monster struct {
 	Attack     int
 	Experience int
 	Initiative int
+	Gold       int // pièces d'or gagnées en battant ce monstre
 }
 
 func initGoblin() Monster {
@@ -19,6 +23,7 @@ func initGoblin() Monster {
 		Attack:     5,
 		Experience: 20,
 		Initiative: 5,
+		Gold:       15,
 	}
 }
 
@@ -35,6 +40,19 @@ func goblinPattern(m *Monster, c *Character, turn int) {
 	fmt.Printf("%s PV : %d / %d\n", c.Name, c.Health, c.MaxHealth)
 }
 
+// Matériaux que peut laisser tomber un gobelin, utilisés ensuite chez le forgeron.
+var goblinDrops = []string{"Fourrure de Loup", "Peau de Troll", "Cuir de Sanglier", "Plume de Corbeau"}
+
+// dropMaterial fait gagner un matériau de fabrication aléatoire au joueur.
+func dropMaterial(c *Character) {
+	mat := goblinDrops[rand.Intn(len(goblinDrops))]
+	if addInventory(c, mat) {
+		fmt.Printf("Le gobelin laisse tomber : %s\n", mat)
+	} else {
+		fmt.Println("Le gobelin laisse tomber un objet, mais votre inventaire est plein !")
+	}
+}
+
 func initNoxar() Monster {
 	return Monster{
 		Name:       "Noxar",
@@ -43,6 +61,7 @@ func initNoxar() Monster {
 		Attack:     12,
 		Experience: 100,
 		Initiative: 8,
+		Gold:       150,
 	}
 }
 

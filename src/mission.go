@@ -18,6 +18,11 @@ func gainExperience(c *Character, amount int) {
 	fmt.Printf("Expérience : %d / %d\n", c.Experience, c.ExperienceMax)
 }
 
+func gainGold(c *Character, amount int) {
+	c.Money += amount
+	fmt.Printf("%s gagne %d pièces d'or (Or : %d)\n", c.Name, amount, c.Money)
+}
+
 var spellCosts = map[string]int{
 	"Coup de poing": 5,
 	"Star Shot":     15,
