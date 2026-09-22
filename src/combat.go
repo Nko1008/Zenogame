@@ -38,9 +38,7 @@ func characterTurn(c *Character, m *Monster) {
 			return
 		}
 		item := c.Inventory[choice-1]
-		if useItem(c, item) {
-			c.Inventory = append(c.Inventory[:choice-1], c.Inventory[choice:]...)
-		}
+		useItem(c, item)
 
 	case 3:
 		if len(c.Skills) == 0 {
