@@ -60,7 +60,7 @@ func canCraft(c *Character, r recipe) bool {
 
 // Idée 1 : conseil selon la situation
 func advice(c *Character) {
-	if c.HP < c.MaxHP/2 {
+	if c.Health < c.MaxHealth/2 {
 		fmt.Println("Nekomata : « Tes PV sont bas. Bois une potion ou passe au sanctuaire avant de te battre. »")
 		return
 	}
@@ -120,7 +120,7 @@ func quest(c *Character) {
 
 // Idée 6 : sanctuaire
 func sanctuary(c *Character) {
-	if c.HP >= c.MaxHP {
+	if c.Health >= c.MaxHealth {
 		fmt.Println("Nekomata : « Tu es déjà en pleine forme. »")
 		return
 	}
@@ -129,6 +129,6 @@ func sanctuary(c *Character) {
 		return
 	}
 	c.Money -= sanctuaryCost
-	c.HP = c.MaxHP
-	fmt.Printf("Nekomata te soigne. PV : %d / %d (or restant : %d)\n", c.HP, c.MaxHP, c.Money)
+	c.Health = c.MaxHealth
+	fmt.Printf("Nekomata te soigne. PV : %d / %d (or restant : %d)\n", c.Health, c.MaxHealth, c.Money)
 }
