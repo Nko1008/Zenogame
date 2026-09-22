@@ -60,5 +60,3 @@ func bossPattern(m *Monster, c *Character, turn int) {
 	fmt.Printf("%s utilise %s et inflige à %s %d de dégâts\n", m.Name, attackName, c.Name, dmg)
 	fmt.Printf("%s PV : %d / %d\n", c.Name, c.Health, c.MaxHealth)
 }
-
-}
