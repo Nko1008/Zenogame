@@ -73,7 +73,7 @@ func chooseClass() (string, int) {
 	}
 }
 
-// characterCreation permet au joueur de créer son personnage.
+
 func characterCreation() Character {
 	c := initCharacter()
 
