@@ -8,14 +8,14 @@ const (
 	itemBoots = "Bottes de l'aventurier"
 )
 
-// Set de Zeno
+
 const (
 	itemCap      = "Casquette étoilée"
 	itemJacket   = "Veste des Skylands"
 	itemSneakers = "Baskets à étoile"
 )
 
-// Set de Noxar
+
 const (
 	itemCrown     = "Couronne du Néant"
 	itemCloak     = "Manteau d'ombre"
@@ -59,8 +59,7 @@ func slotPtr(c *Character, slot string) *string {
 	}
 }
 
-// equip retire l'objet de l'inventaire et l'installe dans le bon emplacement.
-// Si un autre objet occupait déjà cet emplacement, il retourne dans l'inventaire.
+
 func equip(c *Character, item string) {
 	info, ok := equipData[item]
 	if !ok {
@@ -96,8 +95,7 @@ func equip(c *Character, item string) {
 	fmt.Printf("Équipé : %s (PV max : %d, initiative : %d)\n", item, c.MaxHealth, c.Initiative)
 }
 
-// useItem : utilisé depuis l'inventaire et depuis le combat.
-// Chaque cas gère lui-même le retrait de l'objet de l'inventaire.
+
 func useItem(c *Character, item string) {
 	if _, ok := equipData[item]; ok {
 		equip(c, item)
@@ -115,7 +113,7 @@ func useItem(c *Character, item string) {
 	case "Livre de Sort : Star Shot":
 		before := len(c.Skills)
 		spellBook(&c.Skills)
-		if len(c.Skills) > before { // le livre n'est consommé que si le sort est appris
+		if len(c.Skills) > before { 
 			removeInventory(c, item, 1)
 		}
 	default:
