@@ -2,7 +2,6 @@ package main
 
 import "fmt"
 
-// Equipment représente les 3 emplacements équipables du personnage.
 type Equipment struct {
 	Head  string
 	Torso string
