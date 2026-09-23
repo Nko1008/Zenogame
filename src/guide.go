@@ -7,7 +7,6 @@ const (
 	questReward   = 20
 )
 
-// Nekomata : le chat blanc qui guide le joueur.
 func guide(c *Character) {
 	for {
 		fmt.Println("\n--- Nekomata, le chat blanc ---")
@@ -40,7 +39,7 @@ func guide(c *Character) {
 	}
 }
 
-// owns : vrai si l'objet est dans l'inventaire ou déjà équipé.
+
 func owns(c *Character, item string) bool {
 	return countItem(c, item) > 0 ||
 		c.Equipment.Head == item || c.Equipment.Torso == item || c.Equipment.Feet == item
@@ -58,7 +57,7 @@ func canCraft(c *Character, r recipe) bool {
 	return true
 }
 
-// Idée 1 : conseil selon la situation
+
 func advice(c *Character) {
 	if c.Health < c.MaxHealth/2 {
 		fmt.Println("Nekomata : « Tes PV sont bas. Bois une potion ou passe au sanctuaire avant de te battre. »")
@@ -77,7 +76,7 @@ func advice(c *Character) {
 	fmt.Println("Nekomata : « Tout va bien. Récolte des ressources et fais un tour chez le marchand. »")
 }
 
-// Idée 3 : cadeau unique
+
 func gift(c *Character) {
 	if c.GiftReceived {
 		fmt.Println("Nekomata : « Je t'ai déjà fait mon cadeau. »")
@@ -91,13 +90,11 @@ func gift(c *Character) {
 	fmt.Println("Nekomata te donne : Potion de vie")
 }
 
-// Idée 4 : conseils de combat
 func combatTips() {
 	fmt.Println("Nekomata : « Celui qui a le plus d'initiative joue en premier. »")
 	fmt.Println("Nekomata : « Le gobelin frappe deux fois plus fort tous les 3 tours. Prépare-toi ! »")
 }
 
-// Idée 5 : objectif avec récompense
 func quest(c *Character) {
 	if c.QuestDone {
 		fmt.Println("Nekomata : « Tu as déjà accompli mon objectif, bravo ! »")
@@ -114,7 +111,6 @@ func quest(c *Character) {
 	fmt.Printf("Objectif accompli ! Récompense : %d or (or total : %d)\n", questReward, c.Money)
 }
 
-// Idée 6 : sanctuaire
 func sanctuary(c *Character) {
 	if c.Health >= c.MaxHealth {
 		fmt.Println("Nekomata : « Tu es déjà en pleine forme. »")
