@@ -23,7 +23,7 @@ func checkInventorySpace(c *Character) bool {
 
 func addInventory(c *Character, item string) bool {
 	if !checkInventorySpace(c) {
-		fmt.Println("Inventaire plein !")
+		fmt.Println(red("Inventaire plein !"))
 		return false
 	}
 	c.Inventory = append(c.Inventory, item)
@@ -48,18 +48,18 @@ func removeInventory(c *Character, item string, n int) bool {
 
 func upgradeInventorySlot(c *Character) bool {
 	if c.UpgradeCount >= maxUpg {
-		fmt.Println("Vous avez déjà utilisé 3 augmentations d'inventaire.")
+		fmt.Println(red("Vous avez déjà utilisé 3 augmentations d'inventaire."))
 		return false
 	}
 	c.InventoryMax += 10
 	c.UpgradeCount++
-	fmt.Printf("Capacité de l'inventaire : %d (%d/%d améliorations)\n", c.InventoryMax, c.UpgradeCount, maxUpg)
+	fmt.Println(green(fmt.Sprintf("Capacité de l'inventaire : %d (%d/%d améliorations)", c.InventoryMax, c.UpgradeCount, maxUpg)))
 	return true
 }
 
 func accessInventory(c *Character) {
 	for {
-		fmt.Printf("\n--- Inventaire (%d/%d) ---\n", len(c.Inventory), c.InventoryMax)
+		fmt.Println(cyan(fmt.Sprintf("\n--- Inventaire (%d/%d) ---", len(c.Inventory), c.InventoryMax)))
 		for i, it := range c.Inventory {
 			fmt.Printf("%d. %s\n", i+1, it)
 		}
@@ -69,7 +69,7 @@ func accessInventory(c *Character) {
 			return
 		}
 		if choice < 1 || choice > len(c.Inventory) {
-			fmt.Println("Choix invalide.")
+			fmt.Println(red("Choix invalide."))
 			continue
 		}
 		useItem(c, c.Inventory[choice-1])

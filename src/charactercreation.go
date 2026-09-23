@@ -35,7 +35,7 @@ func chooseName() string {
 		raw := readLine("Choisissez le nom de votre personnage (lettres uniquement) : ")
 
 		if !isLettersOnly(raw) {
-			fmt.Println("Le nom ne doit contenir que des lettres, réessayez.")
+			fmt.Println(red("Le nom ne doit contenir que des lettres, réessayez."))
 			continue
 		}
 
@@ -45,7 +45,7 @@ func chooseName() string {
 
 func chooseClass() (string, int) {
 	for {
-		fmt.Println("\n===== CHOIX DE LA CLASSE =====")
+		fmt.Println(cyan("\n===== CHOIX DE LA CLASSE ====="))
 		fmt.Println("1. Humain (100 PV max)")
 		fmt.Println("2. Elfe (80 PV max)")
 		fmt.Println("3. Nain (120 PV max)")
@@ -53,26 +53,25 @@ func chooseClass() (string, int) {
 		switch readChoice("> ") {
 
 		case 1:
-			fmt.Println("\nVous avez choisi la classe Humain.")
+			fmt.Println(magenta("\nVous avez choisi la classe Humain."))
 			displayClassASCII("Humain")
 			return "Humain", 100
 
 		case 2:
-			fmt.Println("\nVous avez choisi la classe Elfe.")
+			fmt.Println(magenta("\nVous avez choisi la classe Elfe."))
 			displayClassASCII("Elfe")
 			return "Elfe", 80
 
 		case 3:
-			fmt.Println("\nVous avez choisi la classe Nain.")
+			fmt.Println(magenta("\nVous avez choisi la classe Nain."))
 			displayClassASCII("Nain")
 			return "Nain", 120
 
 		default:
-			fmt.Println("Choix invalide.")
+			fmt.Println(red("Choix invalide."))
 		}
 	}
 }
-
 
 func characterCreation() Character {
 	c := initCharacter()
@@ -87,13 +86,13 @@ func characterCreation() Character {
 	c.Health = maxHP / 2
 	c.Skills = []string{"Coup de poing"}
 
-	fmt.Printf(
-		"\nBienvenue, %s le %s ! (PV : %d / %d)\n",
+	fmt.Println(bold(green(fmt.Sprintf(
+		"\nBienvenue, %s le %s ! (PV : %d / %d)",
 		c.Name,
 		c.Class,
 		c.Health,
 		c.MaxHealth,
-	)
+	))))
 
 	return c
 }

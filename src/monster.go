@@ -12,7 +12,7 @@ type Monster struct {
 	Attack     int
 	Experience int
 	Initiative int
-	Gold       int 
+	Gold       int
 }
 
 func initGoblin() Monster {
@@ -36,19 +36,18 @@ func goblinPattern(m *Monster, c *Character, turn int) {
 	if c.Health < 0 {
 		c.Health = 0
 	}
-	fmt.Printf("%s inflige à %s %d de dégâts\n", m.Name, c.Name, dmg)
-	fmt.Printf("%s PV : %d / %d\n", c.Name, c.Health, c.MaxHealth)
+	fmt.Println(red(fmt.Sprintf("%s inflige à %s %d de dégâts", m.Name, c.Name, dmg)))
+	fmt.Printf("%s PV : %s\n", c.Name, healthColor(c.Health, c.MaxHealth))
 }
 
 var goblinDrops = []string{"Fourrure de Loup", "Peau de Troll", "Cuir de Sanglier", "Plume de Corbeau"}
 
-
 func dropMaterial(c *Character) {
 	mat := goblinDrops[rand.Intn(len(goblinDrops))]
 	if addInventory(c, mat) {
-		fmt.Printf("Le gobelin laisse tomber : %s\n", mat)
+		fmt.Println(green(fmt.Sprintf("Le gobelin laisse tomber : %s", mat)))
 	} else {
-		fmt.Println("Le gobelin laisse tomber un objet, mais votre inventaire est plein !")
+		fmt.Println(red("Le gobelin laisse tomber un objet, mais votre inventaire est plein !"))
 	}
 }
 
@@ -75,6 +74,24 @@ func bossPattern(m *Monster, c *Character, turn int) {
 	if c.Health < 0 {
 		c.Health = 0
 	}
-	fmt.Printf("%s utilise %s et inflige à %s %d de dégâts\n", m.Name, attackName, c.Name, dmg)
-	fmt.Printf("%s PV : %d / %d\n", c.Name, c.Health, c.MaxHealth)
+	fmt.Println(red(fmt.Sprintf("%s utilise %s et inflige à %s %d de dégâts", m.Name, attackName, c.Name, dmg)))
+	fmt.Printf("%s PV : %s\n", c.Name, healthColor(c.Health, c.MaxHealth))
+}
+
+// healthColor colore l'affichage des PV : vert si en bonne santé,
+// jaune si moyen, rouge si critique.
+func healthColor(current, max int) string {
+	text := fmt.Sprintf("%d / %d", current, max)
+	if max <= 0 {
+		return text
+	}
+	ratio := float64(current) / float64(max)
+	switch {
+	case ratio <= 0.25:
+		return red(text)
+	case ratio <= 0.5:
+		return yellow(text)
+	default:
+		return green(text)
+	}
 }

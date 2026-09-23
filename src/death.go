@@ -4,9 +4,9 @@ import "fmt"
 
 func isDead(c *Character) bool {
 	if c.Health <= 0 {
-		fmt.Printf("%s est mort...\n", c.Name)
+		fmt.Println(red(fmt.Sprintf("%s est mort...", c.Name)))
 		c.Health = c.MaxHealth / 2
-		fmt.Printf("%s ressuscite avec %d / %d PV !\n", c.Name, c.Health, c.MaxHealth)
+		fmt.Println(yellow(fmt.Sprintf("%s ressuscite avec %d / %d PV !", c.Name, c.Health, c.MaxHealth)))
 		return true
 	}
 	return false

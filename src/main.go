@@ -51,15 +51,16 @@ func initCharacter() Character {
 }
 
 func displayCharacter(player Character) {
+	fmt.Println(cyan("\n--- Fiche personnage ---"))
 	fmt.Println("Nom :", player.Name)
 	fmt.Println("Classe :", player.Class)
-	fmt.Println("Niveau :", player.Level)
-	fmt.Println("PV :", player.Health, "/", player.MaxHealth)
-	fmt.Println("Or :", player.Money)
+	fmt.Println("Niveau :", yellow(fmt.Sprintf("%d", player.Level)))
+	fmt.Printf("PV : %s\n", healthColor(player.Health, player.MaxHealth))
+	fmt.Println("Or :", yellow(fmt.Sprintf("%d", player.Money)))
 	fmt.Println("Inventaire :", player.Inventory)
 	fmt.Println("Sorts :", player.Skills)
-	fmt.Printf("Expérience : %d / %d\n", player.Experience, player.ExperienceMax)
-	fmt.Printf("Mana : %d / %d\n", player.Mana, player.MaxMana)
+	fmt.Printf("Expérience : %s\n", cyan(fmt.Sprintf("%d / %d", player.Experience, player.ExperienceMax)))
+	fmt.Printf("Mana : %s\n", blue(fmt.Sprintf("%d / %d", player.Mana, player.MaxMana)))
 	fmt.Printf("Initiative : %d\n", player.Initiative)
 	fmt.Printf("Equipement - Tête: %s | Torse: %s | Pieds: %s\n",
 		orNone(player.Equipment.Head), orNone(player.Equipment.Torso), orNone(player.Equipment.Feet))

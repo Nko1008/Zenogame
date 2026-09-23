@@ -3,18 +3,18 @@ package main
 import "fmt"
 
 func whoAreThey() {
-	fmt.Println("\nDeux artistes sont cachés dans les tâches du projet :")
-	fmt.Println("- Partie 2 (Économie/Fabrication) : ABBA")
-	fmt.Println("- Partie 3 (Combat) : Steven Spielberg")
+	fmt.Println(cyan("\nDeux artistes sont cachés dans les tâches du projet :"))
+	fmt.Println(yellow("- Partie 2 (Économie/Fabrication) : ABBA"))
+	fmt.Println(yellow("- Partie 3 (Combat) : Steven Spielberg"))
 }
 
 func main() {
-	fmt.Println("Bienvenue à Skylandia !")
+	fmt.Println(bold(magenta("Bienvenue à Skylandia !")))
 
 	player := characterCreation()
 
 	for {
-		fmt.Println("\n=== MENU ===")
+		fmt.Println(cyan("\n=== MENU ==="))
 		fmt.Println("1. Afficher les informations du personnage")
 		fmt.Println("2. Accéder à l'inventaire")
 		fmt.Println("3. Marchand")
@@ -43,10 +43,10 @@ func main() {
 		case 8:
 			whoAreThey()
 		case 9:
-			fmt.Println("À bientôt !")
+			fmt.Println(magenta("À bientôt !"))
 			return
 		default:
-			fmt.Println("Choix invalide.")
+			fmt.Println(red("Choix invalide."))
 		}
 	}
 }

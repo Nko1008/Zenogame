@@ -7,7 +7,7 @@ func playerStarts(c *Character, m *Monster) bool {
 }
 
 func characterTurn(c *Character, m *Monster) bool {
-	fmt.Println("\n--- Votre tour ---")
+	fmt.Println(cyan("\n--- Votre tour ---"))
 	fmt.Println("1. Attaquer")
 	fmt.Println("2. Inventaire")
 	fmt.Println("3. Sorts")
@@ -21,12 +21,12 @@ func characterTurn(c *Character, m *Monster) bool {
 			m.Health = 0
 		}
 		fmt.Println("Vous utilisez Attaque basique")
-		fmt.Printf("%s inflige %d dégâts à %s\n", c.Name, dmg, m.Name)
-		fmt.Printf("%s PV : %d / %d\n", m.Name, m.Health, m.MaxHealth)
+		fmt.Println(green(fmt.Sprintf("%s inflige %d dégâts à %s", c.Name, dmg, m.Name)))
+		fmt.Printf("%s PV : %s\n", m.Name, healthColor(m.Health, m.MaxHealth))
 
 	case 2:
 		if len(c.Inventory) == 0 {
-			fmt.Println("Votre inventaire est vide.")
+			fmt.Println(red("Votre inventaire est vide."))
 			return false
 		}
 		fmt.Println("Inventaire :")
@@ -35,7 +35,7 @@ func characterTurn(c *Character, m *Monster) bool {
 		}
 		choice := readChoice("> ")
 		if choice < 1 || choice > len(c.Inventory) {
-			fmt.Println("Choix invalide.")
+			fmt.Println(red("Choix invalide."))
 			return false
 		}
 		item := c.Inventory[choice-1]
@@ -43,7 +43,7 @@ func characterTurn(c *Character, m *Monster) bool {
 
 	case 3:
 		if len(c.Skills) == 0 {
-			fmt.Println("Vous ne connaissez aucun sort.")
+			fmt.Println(red("Vous ne connaissez aucun sort."))
 			return false
 		}
 		fmt.Println("Sorts :")
@@ -52,17 +52,17 @@ func characterTurn(c *Character, m *Monster) bool {
 		}
 		choice := readChoice("> ")
 		if choice < 1 || choice > len(c.Skills) {
-			fmt.Println("Choix invalide.")
+			fmt.Println(red("Choix invalide."))
 			return false
 		}
 		castSpell(c, m, c.Skills[choice-1])
 
 	case 4:
-		fmt.Println("Vous prenez la fuite...")
+		fmt.Println(yellow("Vous prenez la fuite..."))
 		return true
 
 	default:
-		fmt.Println("Choix invalide.")
+		fmt.Println(red("Choix invalide."))
 	}
 
 	return false
@@ -72,10 +72,11 @@ func trainingFight(c *Character) {
 	m := initGoblin()
 	turn := 1
 
-	fmt.Println("\n=== Un Gobelin d'entrainement apparaît ! ===")
+	fmt.Println(yellow("\n=== Un Gobelin d'entrainement apparaît ! ==="))
+	displayClassASCII("Gobelin d'entrainement")
 
 	for m.Health > 0 {
-		fmt.Printf("\n----- Tour %d -----\n", turn)
+		fmt.Println(cyan(fmt.Sprintf("\n----- Tour %d -----", turn)))
 
 		var fled bool
 		if playerStarts(c, &m) {
@@ -90,24 +91,25 @@ func trainingFight(c *Character) {
 			fled = characterTurn(c, &m)
 		}
 		if fled {
-			fmt.Println("\nVous avez fui le combat.")
+			fmt.Println(yellow("\nVous avez fui le combat."))
 			fmt.Println("Retour au menu principal.")
 			return
 		}
 		turn++
 	}
 
-	fmt.Println("\nVictoire ! Le gobelin est vaincu.")
+	fmt.Println(green("\nVictoire ! Le gobelin est vaincu."))
+	displayClassASCII("WINNER")
 	gainExperience(c, m.Experience)
 	gainGold(c, m.Gold)
 	dropMaterial(c)
 	fmt.Println("Retour au menu principal.")
 }
 
-
 func bossDeath(c *Character, boss *Monster) bool {
 	if c.Health <= 0 {
-		fmt.Printf("\n%s succombe face à %s...\n", c.Name, boss.Name)
+		displayClassASCII("LOSER")
+		fmt.Println(red(fmt.Sprintf("\n%s succombe face à %s...", c.Name, boss.Name)))
 		fmt.Println("Retour au menu principal.")
 		return true
 	}
@@ -118,38 +120,48 @@ func bossFight(c *Character) {
 	boss := initNoxar()
 	turn := 1
 
-	fmt.Printf("\n=== %s apparaît ! ===\n", boss.Name)
+	fmt.Println(red(fmt.Sprintf("\n=== %s apparaît ! ===", boss.Name)))
+	displayClassASCII("Noxar apparaît !")
 
 	for boss.Health > 0 {
-		fmt.Printf("\n----- Tour %d -----\n", turn)
+		fmt.Println(cyan(fmt.Sprintf("\n----- Tour %d -----", turn)))
 
 		var fled bool
+
 		if playerStarts(c, &boss) {
 			fled = characterTurn(c, &boss)
+
 			if !fled && boss.Health > 0 {
 				bossPattern(&boss, c, turn)
+
 				if bossDeath(c, &boss) {
 					return
 				}
 			}
 		} else {
 			bossPattern(&boss, c, turn)
+
 			if bossDeath(c, &boss) {
 				return
 			}
+
 			fled = characterTurn(c, &boss)
 		}
+
 		if fled {
-			fmt.Println("\nVous avez fui le combat.")
+			fmt.Println(yellow("\nVous avez fui le combat."))
 			fmt.Println("Retour au menu principal.")
 			return
 		}
+
 		turn++
 	}
 
-	fmt.Printf("\n%s est vaincu ! Vous avez gagné le combat final !\n", boss.Name)
+	fmt.Println(green(fmt.Sprintf("\n%s est vaincu ! Vous avez gagné le combat final !", boss.Name)))
+
 	c.NoxarDefeated = true
 	gainExperience(c, boss.Experience)
 	gainGold(c, boss.Gold)
+
 	fmt.Println("Retour au menu principal.")
 }

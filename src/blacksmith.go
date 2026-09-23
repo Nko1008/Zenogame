@@ -14,20 +14,19 @@ type recipe struct {
 }
 
 var recipes = []recipe{
-	
+
 	{itemHat, map[string]int{"Plume de Corbeau": 1, "Cuir de Sanglier": 1}},
 	{itemTunic, map[string]int{"Fourrure de Loup": 2, "Peau de Troll": 1}},
 	{itemBoots, map[string]int{"Fourrure de Loup": 1, "Cuir de Sanglier": 1}},
-	
+
 	{itemCap, map[string]int{"Plume de Corbeau": 2, "Cuir de Sanglier": 1}},
 	{itemJacket, map[string]int{"Cuir de Sanglier": 2, "Fourrure de Loup": 1}},
 	{itemSneakers, map[string]int{"Fourrure de Loup": 1, "Plume de Corbeau": 1, "Cuir de Sanglier": 1}},
-	
+
 	{itemCrown, map[string]int{"Plume de Corbeau": 2, "Peau de Troll": 1}},
 	{itemCloak, map[string]int{"Peau de Troll": 2, "Plume de Corbeau": 1}},
 	{itemVoidBoots, map[string]int{"Peau de Troll": 2, "Cuir de Sanglier": 1}},
 }
-
 
 func effectLabel(item string) string {
 	info, ok := equipData[item]
@@ -44,18 +43,18 @@ func effectLabel(item string) string {
 	if len(effects) == 0 {
 		return ""
 	}
-	return " -> " + strings.Join(effects, ", ")
+	return cyan(" -> " + strings.Join(effects, ", "))
 }
 
 func blacksmith(c *Character) {
 	for {
-		fmt.Printf("\n--- Forgeron --- (Or : %d, coût : %d)\n", c.Money, forgeCost)
+		fmt.Println(cyan(fmt.Sprintf("\n--- Forgeron --- (Or : %d, coût : %d)", c.Money, forgeCost)))
 		for i, r := range recipes {
 			mats := make([]string, 0, len(r.Materials))
 			for mat := range r.Materials {
 				mats = append(mats, mat)
 			}
-			sort.Strings(mats) 
+			sort.Strings(mats)
 			parts := []string{}
 			for _, mat := range mats {
 				parts = append(parts, fmt.Sprintf("%d %s", r.Materials[mat], mat))
@@ -68,7 +67,7 @@ func blacksmith(c *Character) {
 			return
 		}
 		if choice < 1 || choice > len(recipes) {
-			fmt.Println("Choix invalide.")
+			fmt.Println(red("Choix invalide."))
 			continue
 		}
 		craft(c, recipes[choice-1])
@@ -77,27 +76,26 @@ func blacksmith(c *Character) {
 
 func craft(c *Character, r recipe) {
 	if c.Money < forgeCost {
-		fmt.Println("Pas assez d'or pour la fabrication.")
+		fmt.Println(red("Pas assez d'or pour la fabrication."))
 		return
 	}
 	total := 0
 	for mat, qty := range r.Materials {
 		if countItem(c, mat) < qty {
-			fmt.Printf("Ressource manquante : %s (x%d requis)\n", mat, qty)
+			fmt.Println(red(fmt.Sprintf("Ressource manquante : %s (x%d requis)", mat, qty)))
 			return
 		}
 		total += qty
 	}
 	if len(c.Inventory)-total+1 > c.InventoryMax {
-		fmt.Println("Pas assez de place dans l'inventaire.")
+		fmt.Println(red("Pas assez de place dans l'inventaire."))
 		return
 	}
 	for mat, qty := range r.Materials {
 		removeInventory(c, mat, qty)
 	}
 	c.Money -= forgeCost
-	fmt.Printf("Vous avez fabriqué : %s\n", r.Result)
-
+	fmt.Println(green(fmt.Sprintf("Vous avez fabriqué : %s", r.Result)))
 
 	addInventory(c, r.Result)
 	equip(c, r.Result)
