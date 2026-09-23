@@ -5,7 +5,6 @@ import (
 	"time"
 )
 
-// Tâche 5 : la potion se consomme et rend 50 PV, sans dépasser le max.
 func takePot(c *Character) {
 	if !removeInventory(c, "Potion de vie", 1) {
 		fmt.Println("Vous n'avez pas de Potion de vie.")
@@ -19,7 +18,6 @@ func takePot(c *Character) {
 	fmt.Printf("PV : %d / %d\n", c.Health, c.MaxHealth)
 }
 
-// Tâche 9 : 10 dégâts par seconde pendant 3 secondes.
 func poisonPot(c *Character) {
 	if !removeInventory(c, "Potion de poison", 1) {
 		fmt.Println("Vous n'avez pas de Potion de poison.")
