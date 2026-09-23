@@ -2,7 +2,6 @@ package main
 
 import "fmt"
 
-// displayClassASCII affiche l'image ASCII correspondant à la classe choisie.
 func displayClassASCII(class string) {
 	switch class {
 
