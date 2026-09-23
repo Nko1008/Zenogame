@@ -12,7 +12,7 @@ type Monster struct {
 	Attack     int
 	Experience int
 	Initiative int
-	Gold       int // pièces d'or gagnées en battant ce monstre
+	Gold       int 
 }
 
 func initGoblin() Monster {
@@ -40,10 +40,9 @@ func goblinPattern(m *Monster, c *Character, turn int) {
 	fmt.Printf("%s PV : %d / %d\n", c.Name, c.Health, c.MaxHealth)
 }
 
-// Matériaux que peut laisser tomber un gobelin, utilisés ensuite chez le forgeron.
 var goblinDrops = []string{"Fourrure de Loup", "Peau de Troll", "Cuir de Sanglier", "Plume de Corbeau"}
 
-// dropMaterial fait gagner un matériau de fabrication aléatoire au joueur.
+
 func dropMaterial(c *Character) {
 	mat := goblinDrops[rand.Intn(len(goblinDrops))]
 	if addInventory(c, mat) {
