@@ -6,9 +6,6 @@ func playerStarts(c *Character, m *Monster) bool {
 	return c.Initiative >= m.Initiative
 }
 
-// characterTurn joue le tour du joueur.
-// Elle renvoie true si le joueur a choisi de fuir le combat (le combat doit
-// alors s'arrêter immédiatement), false sinon.
 func characterTurn(c *Character, m *Monster) bool {
 	fmt.Println("\n--- Votre tour ---")
 	fmt.Println("1. Attaquer")
@@ -107,9 +104,7 @@ func trainingFight(c *Character) {
 	fmt.Println("Retour au menu principal.")
 }
 
-// bossDeath vérifie si le joueur est mort face à Noxar. Contrairement à
-// isDead (utilisée contre les gobelins), il n'y a pas de résurrection ici :
-// la mort face à Noxar met fin au combat et renvoie au menu principal.
+
 func bossDeath(c *Character, boss *Monster) bool {
 	if c.Health <= 0 {
 		fmt.Printf("\n%s succombe face à %s...\n", c.Name, boss.Name)
