@@ -30,7 +30,6 @@ func addInventory(c *Character, item string) bool {
 	return true
 }
 
-// removeInventory retire n exemplaires de item. Renvoie false s'il n'y en a pas assez.
 func removeInventory(c *Character, item string, n int) bool {
 	if countItem(c, item) < n {
 		return false
