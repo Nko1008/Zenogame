@@ -14,22 +14,21 @@ type recipe struct {
 }
 
 var recipes = []recipe{
-	// Équipements du sujet
+	
 	{itemHat, map[string]int{"Plume de Corbeau": 1, "Cuir de Sanglier": 1}},
 	{itemTunic, map[string]int{"Fourrure de Loup": 2, "Peau de Troll": 1}},
 	{itemBoots, map[string]int{"Fourrure de Loup": 1, "Cuir de Sanglier": 1}},
-	// Set de Zeno
+	
 	{itemCap, map[string]int{"Plume de Corbeau": 2, "Cuir de Sanglier": 1}},
 	{itemJacket, map[string]int{"Cuir de Sanglier": 2, "Fourrure de Loup": 1}},
 	{itemSneakers, map[string]int{"Fourrure de Loup": 1, "Plume de Corbeau": 1, "Cuir de Sanglier": 1}},
-	// Set de Noxar
+	
 	{itemCrown, map[string]int{"Plume de Corbeau": 2, "Peau de Troll": 1}},
 	{itemCloak, map[string]int{"Peau de Troll": 2, "Plume de Corbeau": 1}},
 	{itemVoidBoots, map[string]int{"Peau de Troll": 2, "Cuir de Sanglier": 1}},
 }
 
-// effectLabel décrit en une phrase courte ce que rapporte un équipement,
-// pour que le joueur sache pourquoi il le fabrique et pas juste "au pif".
+
 func effectLabel(item string) string {
 	info, ok := equipData[item]
 	if !ok {
@@ -99,8 +98,7 @@ func craft(c *Character, r recipe) {
 	c.Money -= forgeCost
 	fmt.Printf("Vous avez fabriqué : %s\n", r.Result)
 
-	// L'objet fabriqué s'équipe automatiquement : ça donne tout de suite
-	// le bonus de PV max (et d'initiative) associé à l'équipement.
+
 	addInventory(c, r.Result)
 	equip(c, r.Result)
 }
